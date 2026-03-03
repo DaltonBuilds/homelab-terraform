@@ -12,6 +12,11 @@ variable "ip_addresses" {
 
 variable "gateway_ip" {
     description = "Gateway IP address for the network"
-    type = string
-    default = ""
+    type        = string
+    default     = ""
+}
+
+variable "ssh_public_key" {
+    description = "SSH public key for VM and container root access"
+    type        = string
 }

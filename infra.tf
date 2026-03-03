@@ -20,6 +20,74 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
   }
 }
 
+# Download Debian 12 LXC template 
+resource "proxmox_virtual_environment_download_file" "debian_lxc_template" {
+    node_name    = var.node_name
+    content_type = "vztmpl"
+    datastore_id = "local"
+    url          = "https://cloud.debian.org/images/cloud/bookworm/latest/debian-12-generic-amd64.tar.xz"
+    file_name    = "debian-12-generic-amd64.tar.xz"
+}
+
+# Create LXC container for garage
+resource "proxmox_virtual_environment_container" "garage" {
+    node_name    = var.node_name
+    vm_id        = local.containers["garage"].id
+    tags         = local.containers["garage"].tags
+    unprivileged = true
+
+    features {
+        nesting = true
+    }
+
+    initialization {
+        hostname = local.containers["garage"].hostname
+
+        ip_config {
+            ipv4 {
+                address = "${local.containers["garage"].ip}/24"
+                gateway = var.gateway_ip
+            }
+        }
+
+        user_account {
+            keys = [var.ssh_public_key]
+        }
+    }
+
+    cpu {
+        cores = local.containers["garage"].cores
+    }
+
+    memory {
+        dedicated = local.containers["garage"].memory
+    }
+
+    # Root OS disk (minimal size)
+    disk {
+        datastore_id = "local-lvm"
+        size         = local.containers["garage"].disk_size
+    }
+
+    # Separate data volume for garage object storage
+    mount_point {
+        volume = "local-lvm"
+        size   = "${local.containers["garage"].data_disk_size}G"
+        path   = "/mnt/data"
+    }
+
+    network_interface {
+        name   = "veth0"
+        bridge = "vmbr0"
+    }
+
+    operating_system {
+        template_file_id = proxmox_virtual_environment_download_file.debian_lxc_template.id
+        type             = "debian"
+    }
+}
+
+# Create VMs for nodes
 resource "proxmox_virtual_environment_vm" "nodes" {
     for_each = local.nodes
     name      = each.key
