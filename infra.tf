@@ -45,7 +45,7 @@ resource "proxmox_virtual_environment_vm" "nodes" {
     disk {
         datastore_id = "local-lvm"
         interface = "scsi0"
-        size = 20
+        size = each.value.disk_size
         import_from = proxmox_virtual_environment_download_file.ubuntu_image.id
     }
 
