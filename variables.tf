@@ -1,3 +1,9 @@
+variable "proxmox_endpoint" {
+    description = "Proxmox API endpoint"
+    type = string
+    default = ""
+}
+
 variable "node_name" {
     description = "Default Proxmox node name - can be overridden by terraform.tfvars"
     type = string
