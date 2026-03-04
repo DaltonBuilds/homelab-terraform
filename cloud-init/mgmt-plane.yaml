@@ -1,5 +1,15 @@
 #cloud-config
+package_update: true
+package_upgrade: true
+ssh_pwauth: false
+
 packages:
   - qemu-guest-agent
+  - curl
+  - apt-transport-https
+  - ca-certificates
+  - gnupg
+  - nfs-common
+
 runcmd:
   - systemctl enable --now qemu-guest-agent

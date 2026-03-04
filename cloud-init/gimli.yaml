@@ -1,5 +1,15 @@
 #cloud-config
+package_update: true
+package_upgrade: true
+ssh_pwauth: false
+
 packages:
   - qemu-guest-agent
+  - nfs-common
+  - open-iscsi
+  - curl
+  - apt-transport-https
+
 runcmd:
   - systemctl enable --now qemu-guest-agent
+  - systemctl enable --now iscsid

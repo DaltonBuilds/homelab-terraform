@@ -134,5 +134,9 @@ resource "proxmox_virtual_environment_vm" "nodes" {
                 gateway = var.gateway_ip
             }
         }
+
+        user_account {
+            keys = [var.ssh_public_key]
+        }
     }
 }
