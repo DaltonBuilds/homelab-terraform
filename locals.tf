@@ -3,7 +3,7 @@ locals {
     "gimli" = {
       id        = 100
       ip        = var.ip_addresses["gimli"]
-      snippet   = file("${path.module}/cloud-init/gimli.yaml")
+      snippet   = templatefile("${path.module}/cloud-init/gimli.yaml", { ssh_public_keys = var.ssh_public_keys })
       cores     = 4
       memory    = 8192
       disk_size = 50
@@ -12,7 +12,7 @@ locals {
     "nfs-server" = {
       id        = 101
       ip        = var.ip_addresses["nfs-server"]
-      snippet   = file("${path.module}/cloud-init/nfs-server.yaml")
+      snippet   = templatefile("${path.module}/cloud-init/nfs-server.yaml", { ssh_public_keys = var.ssh_public_keys })
       cores     = 2
       memory    = 4096
       disk_size = 600
@@ -21,7 +21,7 @@ locals {
     "mgmt-plane" = {
       id        = 102
       ip        = var.ip_addresses["mgmt-plane"]
-      snippet   = file("${path.module}/cloud-init/mgmt-plane.yaml")
+      snippet   = templatefile("${path.module}/cloud-init/mgmt-plane.yaml", { ssh_public_keys = var.ssh_public_keys })
       cores     = 4
       memory    = 12288
       disk_size = 60
