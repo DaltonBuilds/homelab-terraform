@@ -51,7 +51,7 @@ resource "proxmox_virtual_environment_container" "garage" {
     }
 
     user_account {
-      keys = [var.ssh_public_key]
+      keys = var.ssh_public_keys
     }
   }
 
@@ -135,8 +135,5 @@ resource "proxmox_virtual_environment_vm" "nodes" {
       }
     }
 
-    user_account {
-      keys = [var.ssh_public_key]
-    }
   }
 }
