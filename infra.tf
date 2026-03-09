@@ -20,13 +20,13 @@ resource "proxmox_virtual_environment_file" "cloud_init" {
   }
 }
 
-# Download Apline 3.23 LXC template 
-resource "proxmox_virtual_environment_download_file" "alpine_lxc_template" {
+# Download Debian 13 LXC template 
+resource "proxmox_virtual_environment_download_file" "debian_lxc_template" {
   node_name    = var.node_name
   content_type = "vztmpl"
   datastore_id = "local"
-  url          = "http://download.proxmox.com/images/system/alpine-3.23-default_20260116_amd64.tar.xz"
-  file_name    = "alpine-3.23-default_20260116_amd64.tar.xz"
+  url          = "http://download.proxmox.com/images/system/debian-13-standard_13.1-2_amd64.tar.zst"
+  file_name    = "debian-13-standard_13.1-2_amd64.tar.zst"
 }
 
 # Create LXC container for garage
@@ -82,8 +82,8 @@ resource "proxmox_virtual_environment_container" "garage" {
   }
 
   operating_system {
-    template_file_id = proxmox_virtual_environment_download_file.alpine_lxc_template.id
-    type             = "alpine"
+    template_file_id = proxmox_virtual_environment_download_file.debian_lxc_template.id
+    type             = "debian"
   }
 }
 

@@ -25,5 +25,4 @@ variable "gateway_ip" {
 variable "ssh_public_keys" {
   description = "SSH public keys for VM and container access"
   type        = list(string)
-  default     = []
 }
