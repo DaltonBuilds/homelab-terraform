@@ -23,7 +23,7 @@ locals {
       ip        = var.ip_addresses["mgmt-plane"]
       snippet   = templatefile("${path.module}/cloud-init/mgmt-plane.yaml", { ssh_public_keys = var.ssh_public_keys })
       cores     = 4
-      memory    = 12288
+      memory    = 16384
       disk_size = 60
       tags      = ["node", "homelab", "cluster-management"]
     }
