@@ -117,6 +117,16 @@ resource "proxmox_virtual_environment_vm" "nodes" {
     import_from  = proxmox_virtual_environment_download_file.ubuntu_image.id
   }
 
+# ZFS needs a dedicated data disk - Ansible playbook 'nfs-server' will fail without this
+  dynamic "disk" {
+    for_each = each.value.data_disk_size != null ? [each.value.data_disk_size] : []
+    content {
+      datastore_id = "local-lvm"
+      interface    = "scsi1"
+      size         = disk.value
+    }
+  }
+
   network_device {
     bridge = "vmbr0"
   }
